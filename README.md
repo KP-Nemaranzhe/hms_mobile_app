@@ -1,6 +1,6 @@
 # hms_mobile_app
 
-A new Flutter project.
+Our mobile app for HMS Teaching and Learning System.
 
 ## Getting Started
 
