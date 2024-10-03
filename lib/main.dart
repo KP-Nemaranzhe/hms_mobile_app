@@ -9,11 +9,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HMS Mobile App',
+      title: 'HMS App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blue, // Define the overall theme color
       ),
-      home: SplashScreen(), // Set SplashScreen as the home
+      home: SplashScreen(), // Start with the splash screen on app launch
+      debugShowCheckedModeBanner: false, // Hide the debug banner
     );
   }
 }
