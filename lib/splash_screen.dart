@@ -1,76 +1,93 @@
 import 'package:flutter/material.dart';
-import 'welcome_page.dart'; // Import WelcomePage for redirection after splash screen
+import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts package
+import 'welcome_screen.dart'; // Import the WelcomePage
 
-// SplashScreen class responsible for the app's initial animated screen
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-// State class for SplashScreen that contains the animation logic
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller; // Controls the timing of the animation
-  late Animation<double> _animation; // Defines the scaling animation
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  // Animation controller for managing the fade animation
+  AnimationController? _animationController;
 
-  // Initialize the animation when the app starts
+  // Animation for fading in the text
+  Animation<double>? _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
 
-    // Block comment explaining animation setup
-    /*
-     * AnimationController:
-     * - Handles the duration and the vsync (syncing with the screen's refresh rate).
-     * Tween:
-     * - Animates the scale from 0.0 to 1.0 (no size to full size).
-     */
-    _controller = AnimationController(
-      duration: Duration(seconds: 5), // The animation will take 5 seconds
-      vsync: this, // Synchronizes the animation with the device's screen refresh rate
+    // Initialize the animation controller with a duration of 1 second
+    _animationController = AnimationController(
+      duration: Duration(seconds: 3), // Animation duration
+      vsync: this, // Ticker provider for animations
     );
 
-    // Set up the scaling animation for the icon using Tween and CurvedAnimation
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    // Define the fade animation, fading from 0.0 (invisible) to 1.0 (fully visible)
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: _controller, // Connects the animation controller to the scaling effect
-        curve: Curves.easeInOut, // The animation eases in and out
+        parent: _animationController!, // Link animation to the controller
+        curve: Curves.easeIn, // Easing function for the animation
       ),
     );
 
-    // Start the animation when the splash screen initializes
-    _controller.forward();
+    // Start the fade animation
+    _animationController!.forward();
 
-    // Automatically navigate to WelcomePage after 5 seconds
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => WelcomePage()), // Navigate to the welcome page
-      );
+    // Delay for 3 seconds and then navigate to the WelcomePage
+    Future.delayed(Duration(seconds: 4), () {
+      _navigateToWelcomePage();
     });
   }
 
-  // Dispose of the animation controller to free up resources
+  // Function to navigate to the WelcomePage
+  void _navigateToWelcomePage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => WelcomeScreen()), // Navigate to the next screen
+    );
+  }
+
   @override
   void dispose() {
-    _controller.dispose();
+    // Dispose the animation controller when the widget is disposed
+    _animationController!.dispose();
     super.dispose();
   }
 
-  // Main UI of the splash screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set background to white for contrast
-      body: Center(
-        // Center the icon on the screen
-        child: ScaleTransition(
-          // Animates the size of the app icon
-          scale: _animation, // Scale is tied to the animation controller
-          child: Image.asset(
-            'assets/images/main_hms.png', // Path to the app icon image
-            width: 300, // Width of the app icon
-            height: 300, // Height of the app icon
+      body: Container(
+        color: Colors.black, // Set the background color to black
+        child: Center(
+          child: FadeTransition(
+            opacity: _fadeAnimation!, // Apply the fading animation to the text
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center, // Center the content vertically
+              children: [
+                // Main title text with professional font from Google Fonts
+                Text(
+                  'HMS',
+                  style: GoogleFonts.poppins( // Use a professional font
+                    fontSize: 72, // Increased font size for emphasis
+                    color: Colors.white, // Color of the main title
+                    fontWeight: FontWeight.bold, // Bold font weight
+                  ),
+                ),
+                SizedBox(height: 20), // Spacing between title and subtitle
+                // Subtitle text styled with blue color and professional font
+                Text(
+                  'Mobile for Students',
+                  style: GoogleFonts.poppins( // Use the same professional font
+                    fontSize: 28, // Font size for the subtitle
+                    color: Colors.blue, // Blue color for the subtitle
+                    fontWeight: FontWeight.w300, // Light font weight
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
