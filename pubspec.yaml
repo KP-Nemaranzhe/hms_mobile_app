@@ -1,24 +1,35 @@
-name: hms_mobile_app_gitGang
-description: A mobile application for HMS
-publish_to: 'none' # Remove this line if you want to publish to pub.dev
-version: 1.0.0+1
+name: hms_mobile_app
+description: HMS mobile app for students.
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^6.2.1
+  url_launcher: ^6.3.0
+
+
+
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.12.0 # Check for the latest version
-
-flutter:
-  uses-material-design: true
-  assets:
-    - assets/images/main_hms.png  # Add your image asset here
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: "^0.9.2"
 
 flutter_icons:
   android: true
-  ios: true
-  image_path: "assets/images/main_hms.png"  # Path to your app icon image
+  image_path: "assets/images/main_icon.png"  # Set the app icon
+  adaptive_icon_background: "#000000"
+
+flutter:
+  assets:
+    - assets/images/main_icon.png  # App icon asset
+    - assets/images/background_img.png  # Splash screen background image
+    - assets/images/welcome_background_img.png
+    - assets/images/facebook_icon.png
+    - assets/images/google_icon.png
+    - assets/images/twitter_icon.png
+    - assets/images/instagram_icon.png
+  uses-material-design: true

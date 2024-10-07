@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
-import 'splash_screen.dart'; // Import the splash screen
+import 'splash_screen.dart';
+import 'welcome_screen.dart';
+import 'signin_screen.dart';
+import 'signup_screen.dart';
+import 'forget_password_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const HMSMobileApp());
 }
 
-class MyApp extends StatelessWidget {
+class HMSMobileApp extends StatelessWidget {
+  const HMSMobileApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HMS App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue, // Define the overall theme color
-      ),
-      home: SplashScreen(), // Start with the splash screen on app launch
-      debugShowCheckedModeBanner: false, // Hide the debug banner
+      title: 'HMS Mobile App',
+      theme: ThemeData.light(),
+      home:  SplashScreen(),
+      routes: {
+        '/welcome': (context) => const WelcomeScreen(),
+        '/signin': (context) => const SignInScreen(),
+        '/signup': (context) => const SignUpScreen(),
+        '/forgot-password': (context) => const ForgetPasswordScreen(),
+      },
     );
   }
 }
