@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts package
 import 'welcome_screen.dart'; // Import the WelcomePage
-
+import 'dashboard.dart';
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -37,15 +37,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     // Delay for 3 seconds and then navigate to the WelcomePage
     Future.delayed(Duration(seconds: 4), () {
-      _navigateToWelcomePage();
+      _navigateToDashboard();
     });
   }
 
   // Function to navigate to the WelcomePage
-  void _navigateToWelcomePage() {
+  void _navigateToDashboard() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => WelcomeScreen()), // Navigate to the next screen
+      MaterialPageRoute(builder: (context) => Dashboard()), // Navigate to the next screen
     );
   }
 
