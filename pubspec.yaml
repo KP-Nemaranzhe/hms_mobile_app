@@ -32,4 +32,5 @@ flutter:
     - assets/images/google_icon.png
     - assets/images/twitter_icon.png
     - assets/images/instagram_icon.png
+    - images/user.png
   uses-material-design: true

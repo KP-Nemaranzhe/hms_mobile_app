@@ -28,6 +28,7 @@ class Dashboard extends StatelessWidget {
                          right: 15,
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
                           onTap: () {},
@@ -36,6 +37,23 @@ class Dashboard extends StatelessWidget {
                             color: Colors.white,
                             size: 40,
                           ),
+
+                        ),
+                        Container(
+                            height: 50,
+                            width:50,
+
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: DecorationImage(
+                            image: AssetImage("images/user.png",
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+
+                        ) ,
+
                         ),
                       ],
                     ),
