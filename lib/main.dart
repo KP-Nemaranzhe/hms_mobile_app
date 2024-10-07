@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
+import 'splash_screen.dart';
+import 'welcome_screen.dart';
 import 'signin_screen.dart';
-import 'theme.dart';  // Ensure this is the correct path to your theme.dart file
+import 'signup_screen.dart';
+import 'forget_password_screen.dart';
 
-// Main function: Entry point of the Flutter application
 void main() {
-  runApp(const MyApp());
+  runApp(const HMSMobileApp());
 }
 
-// MyApp widget: The root of the application
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HMSMobileApp extends StatelessWidget {
+  const HMSMobileApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Signup',
-      theme: lightTheme, // Apply light theme defined in theme.dart
-      debugShowCheckedModeBanner: false,
-      home: const SignInScreen(), // Initial screen of the app
+      title: 'HMS Mobile App',
+      theme: ThemeData.light(),
+      home:  SplashScreen(),
+      routes: {
+        '/welcome': (context) => const WelcomeScreen(),
+        '/signin': (context) => const SignInScreen(),
+        '/signup': (context) => const SignUpScreen(),
+        '/forgot-password': (context) => const ForgetPasswordScreen(),
+      },
     );
   }
 }

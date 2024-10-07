@@ -8,6 +8,8 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
+  url_launcher: ^6.3.0
+
 
 
 
@@ -26,4 +28,8 @@ flutter:
     - assets/images/main_icon.png  # App icon asset
     - assets/images/background_img.png  # Splash screen background image
     - assets/images/welcome_background_img.png
+    - assets/images/facebook_icon.png
+    - assets/images/google_icon.png
+    - assets/images/twitter_icon.png
+    - assets/images/instagram_icon.png
   uses-material-design: true
