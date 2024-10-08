@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts package
-import 'welcome_screen.dart'; // Import the WelcomePage
+// Import the WelcomePage
 import 'dashboard.dart';
 class SplashScreen extends StatefulWidget {
   @override

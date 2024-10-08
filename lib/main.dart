@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
-import 'welcome_screen.dart';
 import 'signin_screen.dart';
 import 'signup_screen.dart';
 import 'forget_password_screen.dart';

@@ -2,7 +2,7 @@ name: hms_mobile_app
 description: HMS mobile app for students.
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -33,4 +33,13 @@ flutter:
     - assets/images/twitter_icon.png
     - assets/images/instagram_icon.png
     - images/user.png
+    - images/megaphone.png
+    - images/qa.png
+    - images/submission.png
+    - images/Grade.png
+    - images/settings.png
+    - images/question.png
+    - images/phone.png
+    - images/user-logout.png
+
   uses-material-design: true
