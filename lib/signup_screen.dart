@@ -39,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'last_name': lastNameController.text,
         'email': emailController.text,
         'password': passwordController.text,
+        'password2': confirmPasswordController.text, // Add this line
       }),
     );
 
@@ -50,12 +51,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       );
       // Navigate to the sign-in screen or any other screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SignInScreen(),
+        ),
+      );
     } else {
-      // If the server did not return a 201 CREATED response,
-      // throw an exception.
+      // If the server did not return a 201 CREATED response, show error messages
+      Map<String, dynamic> errorResponse = jsonDecode(response.body);
+      String errorMessage = errorResponse.values
+          .expand((message) => message)
+          .join(', ');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to create user. Please try again.'),
+        SnackBar(
+          content: Text('Failed to create user: $errorMessage'),
         ),
       );
     }
@@ -106,9 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: lightColorScheme.primary,
                         ),
                       ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
+                      const SizedBox(height: 40.0),
                       // Username Field
                       TextFormField(
                         controller: usernameController,
@@ -139,6 +147,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Student Number';
+                          }
+                          if (value.length != 8) {
+                            return 'Student Number must be 8 digits';
                           }
                           return null;
                         },
@@ -289,118 +300,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           Checkbox(
                             value: agreePersonalData,
-                            onChanged: (bool? value) {
+                            onChanged: (value) {
                               setState(() {
-                                agreePersonalData = value ?? false;
+                                agreePersonalData = value!;
                               });
                             },
-                            activeColor: lightColorScheme.primary,
                           ),
-                          const Text(
-                            'I agree to the processing of ',
-                            style: TextStyle(
-                              color: Colors.black45,
-                            ),
-                          ),
-                          Text(
-                            'Personal data',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: lightColorScheme.primary,
-                            ),
-                          ),
+                          const Text("I agree to the processing of personal data."),
                         ],
                       ),
-                      const SizedBox(height: 25.0),
-                      // Sign up button
+                      const SizedBox(height: 30.0),
+                      // Privacy Policy Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton(
+                          onPressed: () {
+                            _launchURL('https://your-privacy-policy-url.com'); // Replace with your URL
+                          },
+                          child: const Text('Privacy Policy'),
+                        ),
+                      ),
+                      const SizedBox(height: 30.0),
+                      // Sign Up Button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formSignupKey.currentState!.validate() &&
-                                agreePersonalData) {
-                              _formSignupKey.currentState!.save();
-                              signUp(); // Call the sign-up function
-                            } else if (!agreePersonalData) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please agree to the processing of personal data'),
-                                ),
-                              );
+                            if (_formSignupKey.currentState!.validate()) {
+                              signUp();
                             }
                           },
-                          child: const Text('Sign up'),
+                          child: const Text('Sign Up'),
                         ),
                       ),
-                      const SizedBox(height: 30.0),
-                      // Social Media Icons
+                      const SizedBox(height: 20.0),
+                      // Redirect to Sign In
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: () => _launchURL('https://www.facebook.com'),
-                            child: Image.asset(
-                              'assets/images/facebook_icon.png',
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () => _launchURL('https://www.google.com'),
-                            child: Image.asset(
-                              'assets/images/google_icon.png',
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () => _launchURL('https://www.twitter.com'),
-                            child: Image.asset(
-                              'assets/images/twitter_icon.png',
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () => _launchURL('https://www.instagram.com'),
-                            child: Image.asset(
-                              'assets/images/instagram_icon.png',
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 25.0),
-                      // Sign in prompt
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Already have an account?',
-                            style: TextStyle(
-                              color: Colors.black45,
-                            ),
-                          ),
+                          const Text("Already have an account?"),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const SignInScreen(),
                                 ),
                               );
                             },
-                            child: Text(
-                              'Sign in',
-                              style: TextStyle(
-                                color: lightColorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: const Text('Sign In'),
                           ),
                         ],
                       ),

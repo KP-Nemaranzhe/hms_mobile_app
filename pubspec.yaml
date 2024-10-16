@@ -10,11 +10,18 @@ dependencies:
   google_fonts: ^6.2.1
   url_launcher: ^6.3.1
   http: ^1.2.2
+  flutter_secure_storage: ^9.2.2
+  intl: ^0.19.0
+  file_picker: ^8.1.2
+  permission_handler: ^11.3.1
+  image_picker: ^1.1.2
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.14.1
+
 
 flutter_icons:
   android: true
@@ -30,4 +37,15 @@ flutter:
     - assets/images/google_icon.png
     - assets/images/twitter_icon.png
     - assets/images/instagram_icon.png
+    - assets/images/megaphone.png
+    - assets/images/qa.png
+    - assets/images/submission.png
+    - assets/images/Grade.png
+    - assets/images/settings.png
+    - assets/images/question.png
+    - assets/images/phone.png
+    - assets/images/user-logout.png
+    - assets/images/user.png
+    - assets/images/logout.png
+
   uses-material-design: true

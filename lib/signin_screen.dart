@@ -4,6 +4,10 @@ import 'custom_scaffold.dart'; // Custom scaffold widget
 import 'theme.dart'; // Theme settings
 import 'forget_password_screen.dart'; // Import the Forgot Password Screen
 import 'package:url_launcher/url_launcher.dart'; // Import url_launcher package for opening URLs
+import 'dashboard.dart'; // Import the Dashboard screen
+import 'package:http/http.dart' as http; // Import HTTP package
+import 'dart:convert'; // Import for JSON encoding/decoding
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Import secure storage package
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -14,7 +18,11 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formSignInKey = GlobalKey<FormState>(); // Key for form validation
+  final _storage = FlutterSecureStorage(); // Secure storage instance
   bool rememberPassword = true; // Flag for 'Remember me' checkbox
+
+  String email = ''; // To hold the email input
+  String password = ''; // To hold the password input
 
   // Method to launch external URLs
   Future<void> _launchURL(String url) async {
@@ -25,6 +33,49 @@ class _SignInScreenState extends State<SignInScreen> {
       await launchUrl(uri); // Launch the URL
     } else {
       throw 'Could not launch $url'; // Throw an error if the URL cannot be launched
+    }
+  }
+
+  // Method to handle login
+  Future<void> _login() async {
+    final url = 'http://10.0.2.2:8000/api/token/'; // Update with your Django API URL
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'username': email,
+          'password': password,
+        }),
+      );
+
+      // Check if the login was successful
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final String accessToken = responseData['access']; // Extract the access token
+
+        // Store the token securely
+        await _storage.write(key: 'token', value: accessToken);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
+
+        // Navigate to the Dashboard screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Dashboard()), // Remove const here if Dashboard has non-const constructor
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login failed. Please try again.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error occurred. Please try again.')),
+      );
     }
   }
 
@@ -69,6 +120,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
                       // Email input field
                       TextFormField(
+                        onChanged: (value) {
+                          email = value; // Update email on change
+                        },
                         validator: (value) {
                           // Validate email input
                           if (value == null || value.isEmpty) {
@@ -102,6 +156,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       TextFormField(
                         obscureText: true, // Hide password input
                         obscuringCharacter: '*',
+                        onChanged: (value) {
+                          password = value; // Update password on change
+                        },
                         validator: (value) {
                           // Validate password input
                           if (value == null || value.isEmpty) {
@@ -182,18 +239,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             // Validate form and check rememberPassword status
-                            if (_formSignInKey.currentState!.validate() && rememberPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Processing Data'), // SnackBar message
-                                ),
-                              );
-                            } else if (!rememberPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please agree to the processing of personal data'), // Error message
-                                ),
-                              );
+                            if (_formSignInKey.currentState!.validate()) {
+                              _login(); // Call login method
                             }
                           },
                           child: const Text('Sign In'), // Button label
@@ -278,40 +325,33 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       const SizedBox(height: 25.0), // Spacer
 
-                      // Prompt to navigate to Sign Up screen
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Don\'t have an account? ', // Prompt message
-                            style: TextStyle(
-                              color: Colors.black45,
-                            ),
+                      // Prompt for existing users
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to Sign Up page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                          );
+                        },
+                        child: const Text(
+                          'Don’t have an account? Sign up',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.w500,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to Sign Up screen
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (e) => const SignUpScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Sign up', // Sign up link
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: lightColorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
+            ),
+          ),
+          const Expanded(
+            flex: 1,
+            child: SizedBox(
+              height: 10,
             ),
           ),
         ],
